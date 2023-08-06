@@ -1,6 +1,14 @@
+using Medical.System.Core.Services;
+using Medical.System.Core.Services.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSingleton<IDatabaseResolverService, DatabaseResolverService>();
+builder.Services.AddSingleton<IVaultService, VaultService>();
+builder.Services.AddSingleton<ICatalogsService, CatalogsService>();
+
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
