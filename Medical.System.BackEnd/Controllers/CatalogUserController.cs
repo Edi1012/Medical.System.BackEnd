@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Medical.System.Core.Models.DTOs;
+﻿using Medical.System.Core.Models.DTOs;
 using Medical.System.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
