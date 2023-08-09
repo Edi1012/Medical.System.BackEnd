@@ -1,10 +1,7 @@
-﻿using Medical.System.Core.DTOs;
-using Medical.System.Core.Models.Catalogs;
+﻿using FluentValidation;
+using Medical.System.Core.Models.DTOs;
 using Medical.System.Core.Services.Interfaces;
-using Medical.System.Core.Validator.Catalogs.User;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
-using System.ComponentModel.DataAnnotations;
 
 namespace Medical.System.BackEnd.Controllers
 {
@@ -12,18 +9,12 @@ namespace Medical.System.BackEnd.Controllers
     [ApiController]
     public class CatalogUserController : ControllerBase
     {
-        private readonly CreateUserValidator _createUserValidator;
+        public ICatalogsService CatalogsService { get; }
 
         public CatalogUserController(ICatalogsService catalogsService)
         {
             CatalogsService = catalogsService;
-            _createUserValidator = new CreateUserValidator(CatalogsService);
         }
-
-        public ICatalogsService CatalogsService { get; }
-
-
-
 
         /// <summary>
         /// Creates a new user.
@@ -47,39 +38,8 @@ namespace Medical.System.BackEnd.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserDto userDto)
         {
-            var user = new User
-            {
-                // Generate new ObjectId
-                Id = ObjectId.GenerateNewId().ToString(),
-                UserName = userDto.UserName,
-                Password = userDto.Password, // remember to hash this before saving in a real scenario!
-            };
-
-
-            var validationResult = await _createUserValidator.ValidateAsync(userDto);
-
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(validationResult.Errors);
-            }
-
-            await CatalogsService.CreateUserAsync(user);
-
-            //// Return a 201 Created response, with the created user in the body, you can replace 'user' with a ReadUserDto if you want to hide the password.
-            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult GetUserById(string id)
-        {
-            var user = CatalogsService.GetUserByIdAsync(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(user);
+                var user = await CatalogsService.CreateUserAsync(userDto);
+                return Ok(user);
         }
     }
 }
