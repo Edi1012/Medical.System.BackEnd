@@ -1,5 +1,8 @@
-﻿using Medical.System.Core.Models.DTOs;
+﻿using Amazon.Auth.AccessControlPolicy;
+using Medical.System.Core.Models.DTOs;
+using Medical.System.Core.Models.Entities;
 using Medical.System.Core.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Medical.System.BackEnd.Controllers
@@ -8,9 +11,9 @@ namespace Medical.System.BackEnd.Controllers
     [ApiController]
     public class CatalogUserController : ControllerBase
     {
-        public ICatalogsService CatalogsService { get; }
+        public IUsersService CatalogsService { get; }
 
-        public CatalogUserController(ICatalogsService catalogsService)
+        public CatalogUserController(IUsersService catalogsService)
         {
             CatalogsService = catalogsService;
         }
@@ -39,6 +42,17 @@ namespace Medical.System.BackEnd.Controllers
         {
                 var user = await CatalogsService.CreateUserAsync(userDto);
                 return Ok(user);
+        }
+
+
+
+
+        [Authorize(Policy = "IsAdmin")]
+        [Authorize(Policy = "IsAdmin")]
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> Login()
+        {
+            return Ok("Todos");
         }
     }
 }
