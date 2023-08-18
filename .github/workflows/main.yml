@@ -1,5 +1,8 @@
 name: Build and Push to Docker Hub
 
+- name: List directory structure
+  run: ls -R
+
 on:
   push:
     branches:
