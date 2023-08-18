@@ -19,5 +19,5 @@ RUN dotnet publish "Medical.System.BackEnd.csproj" -c Release -o /app/publish /p
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY Medical.System.BackEnd/appsettings.json ./ # Esta línea copia el archivo appsettings.json
+COPY appsettings.json ./ # Esta línea copia el archivo appsettings.json
 ENTRYPOINT ["dotnet", "Medical.System.BackEnd.dll"]
