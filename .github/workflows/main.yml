@@ -22,5 +22,5 @@ jobs:
         run: |
           REPO_NAME="edi-medical-system"
           TAG_NAME="${{ secrets.MEDICAL_SYSTEM_DOCKER_HUB_USERNAME }}/$REPO_NAME:${{ github.sha }}"
-          docker build -f ../../Dockerfile -t $TAG_NAME .
+          docker build -f ../../Medical.System.BackEnd/Dockerfile -t $TAG_NAME .
           docker push $TAG_NAME
