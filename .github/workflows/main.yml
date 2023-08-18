@@ -17,10 +17,12 @@ jobs:
       - name: Login to Docker Hub
         run: echo "${{ secrets.MEDICAL_SYSTEM_DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.MEDICAL_SYSTEM_DOCKER_HUB_USERNAME }} --password-stdin
 
+        
+
       # Construir y subir la imagen Docker usando el nombre de usuario de Docker Hub y el hash de commit como etiqueta
       - name: Build and push Docker image
         run: |
           REPO_NAME="edi-medical-system"
           TAG_NAME="${{ secrets.MEDICAL_SYSTEM_DOCKER_HUB_USERNAME }}/$REPO_NAME:${{ github.sha }}"
-          docker build -f ../../Dockerfile -t $TAG_NAME .
+          docker build -f ./Medical.System.BackEnd/Dockerfile -t $TAG_NAME .
           docker push $TAG_NAME
