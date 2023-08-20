@@ -9,11 +9,15 @@ using Medical.System.Core.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using MongoDB.Driver.Core.Operations;
 using System.Security.Claims;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+//builder.Services.Configure<JwtOptions>(Configuration.GetSection("Jwt"));
+
+builder.Configuration.AddEnvironmentVariables();
+
 
 // Add services to the container.
 builder.Services.AddSingleton<IDatabaseResolverService, DatabaseResolverService>();
@@ -29,7 +33,8 @@ builder.Services.AddSingleton<ITokenRepository, TokenRepository>();
 //builder.Services.AddTransient<IRepository<User>, Repository<User>>();
 builder.Services.AddSingleton<IUnitOfWork, UnitOfWork>();
 
-string key = builder.Configuration["JwtKey"]; // Obtener la clave desde un archivo de configuración o variable de entorno
+
+//string key = builder.Configuration["JwtKey"]; // Obtener la clave desde un archivo de configuración o variable de entorno
 //builder.Services.AddSingleton<ITokenService>(new TokenService());
 builder.Services.AddSingleton<ITokenService, TokenService>();
 
@@ -123,11 +128,11 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseHttpsRedirection();
 
