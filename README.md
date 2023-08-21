@@ -46,7 +46,63 @@ If you prefer to build and run the application from the source code, follow thes
    ```
 
 ## Support and Documentation
+## Project Structure
+
+```
+Medical.System.Core:
+  Enums: "Contains the enumerations used in the system such as Gender, Marital Status, and User Roles."
+  Exceptions: "Houses the custom exception classes and middleware for error handling."
+  DTOs: "Defines the Data Transfer Objects for interacting with the system."
+  Entities: "Defines the core entity models used in the application."
+  Repositories: "Contains the repository classes for data access."
+  Services: "Contains the service classes for business logic."
+  Interfaces: "Contains the interface definitions for repositories and services."
+  UnitOfWork: "Includes the implementation and interface for the Unit of Work pattern."
+  Validators: "Houses the validator classes for validating data."
+  Files:
+    Enums:
+      - Gender.cs
+      - MaritalStatus.cs
+      - UserRoleEnum.cs
+    Exceptions:
+      - NotFoundException.cs
+      - ValidationException.cs
+      - ErrorDetail.cs
+      - ErrorResponse.cs
+      - ErrorHandlingMiddleware.cs
+    DTOs:
+      - AddressDTO.cs
+      - CreateSupplierDto.cs
+      - ...
+    Entities:
+      - Address.cs
+      - EmergencyContact.cs
+      - ...
+    Repositories:
+      - GenericRepository.cs
+      - SupplierRepository.cs
+      - ...
+    Services:
+      - DatabaseResolverService.cs
+      - SupplierService.cs
+      - ...
+    Interfaces:
+      - IGenericRepository.cs
+      - ISupplierRepository.cs
+      - ...
+    UnitOfWork:
+      - IUnitOfWork.cs
+      - UnitOfWork.cs
+    Validators:
+      - CreateTokenValidator.cs
+      - CreateUserValidator.cs
+```
+
+
+
 For additional support, documentation, or information about contributions, please refer to the project's documentation or contact the development team.
 
 ---
+
+
 
