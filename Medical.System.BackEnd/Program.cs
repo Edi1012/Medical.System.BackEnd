@@ -23,6 +23,7 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddSingleton<IDatabaseResolverService, DatabaseResolverService>();
 builder.Services.AddSingleton<IVaultService, VaultService>();
 builder.Services.AddSingleton<IUsersService, UsersService>();
+builder.Services.AddSingleton<ISupplierRepository, SupplierRepository>();
 builder.Services.AddSingleton<ISupplierService, SupplierService>();
 builder.Services.AddSingleton<ISupplierRepository, SupplierRepository>();
 
@@ -39,23 +40,23 @@ builder.Services.AddSingleton<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<ITokenService, TokenService>();
 
 
-builder.Services.AddTransient<IGenericRepository<User>>(sp => new GenericRepository<User>(
-    sp.GetRequiredService<IDatabaseResolverService>(),
-    DatabaseTypes.MedicalSystem,
-    "Catalogs_user"
-));
+//builder.Services.AddTransient<IGenericRepository<User>>(sp => new GenericRepository<User>(
+//    sp.GetRequiredService<IDatabaseResolverService>(),
+//    DatabaseTypes.MedicalSystem,
+//    "Catalogs_user"
+//));
 
-builder.Services.AddTransient<IGenericRepository<RevokedToken>>(sp => new GenericRepository<RevokedToken>(
-       sp.GetRequiredService<IDatabaseResolverService>(),
-          DatabaseTypes.MedicalSystem,
-             "RevokedTokens"
-             ));
+//builder.Services.AddTransient<IGenericRepository<RevokedToken>>(sp => new GenericRepository<RevokedToken>(
+//       sp.GetRequiredService<IDatabaseResolverService>(),
+//          DatabaseTypes.MedicalSystem,
+//             "RevokedTokens"
+//             ));
 
-builder.Services.AddTransient<IGenericRepository<Supplier>>(sp => new GenericRepository<Supplier>(
-       sp.GetRequiredService<IDatabaseResolverService>(),
-          DatabaseTypes.MedicalSystem,
-             "Suppliers"
-             ));
+//builder.Services.AddTransient<IGenericRepository<Supplier>>(sp => new GenericRepository<Supplier>(
+//       sp.GetRequiredService<IDatabaseResolverService>(),
+//          DatabaseTypes.MedicalSystem,
+//             "Suppliers"
+//             ));
 
 //builder.Services.AddTransient<ExceptionMiddleware>();
 
