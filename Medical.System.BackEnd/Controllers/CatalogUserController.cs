@@ -47,11 +47,11 @@ namespace Medical.System.BackEnd.Controllers
 
 
 
-        [Authorize(Policy = "IsAdmin")]
-        [Authorize(Policy = "IsAdmin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetAll")]
         public async Task<IActionResult> Login()
         {
+            var user = await CatalogsService.CreateUserAsync(userDto);
             return Ok("Todos");
         }
     }
