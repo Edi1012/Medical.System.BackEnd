@@ -26,7 +26,7 @@ public class SuppliersController : ControllerBase
 
     [Authorize(Roles = UserRoleConstants.Admin)]
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetByIdAsync(Guid id)
+    public async Task<IActionResult> GetByIdAsync(string id)
     {
         var supplier = await SupplierService.GetByIdAsync(id);
         return Ok(supplier);

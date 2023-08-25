@@ -1,5 +1,4 @@
 using Medical.System.Core.Middlewares;
-using Medical.System.Core.Models.Entities;
 using Medical.System.Core.Repositories;
 using Medical.System.Core.Repositories.Implementations;
 using Medical.System.Core.Repositories.Interfaces;
@@ -7,6 +6,7 @@ using Medical.System.Core.Services.Implementations;
 using Medical.System.Core.Services.Interfaces;
 using Medical.System.Core.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Security.Claims;
@@ -14,52 +14,20 @@ using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Services.Configure<JwtOptions>(Configuration.GetSection("Jwt"));
-
 builder.Configuration.AddEnvironmentVariables();
 
-
-// Add services to the container.
+// Configure services.
 builder.Services.AddSingleton<IDatabaseResolverService, DatabaseResolverService>();
 builder.Services.AddSingleton<IVaultService, VaultService>();
 builder.Services.AddSingleton<IUsersService, UsersService>();
-builder.Services.AddSingleton<ISupplierRepository, SupplierRepository>();
-builder.Services.AddSingleton<ISupplierService, SupplierService>();
-builder.Services.AddSingleton<ISupplierRepository, SupplierRepository>();
-
-
-//builder.Services.AddSingleton<ITokenService, TokenService>();
 builder.Services.AddSingleton<IUserRepository, UserRepository>();
 builder.Services.AddSingleton<ITokenRepository, TokenRepository>();
-//builder.Services.AddTransient<IRepository<User>, Repository<User>>();
-builder.Services.AddSingleton<IUnitOfWork, UnitOfWork>();
-
-
-//string key = builder.Configuration["JwtKey"]; // Obtener la clave desde un archivo de configuración o variable de entorno
-//builder.Services.AddSingleton<ITokenService>(new TokenService());
+builder.Services.AddSingleton<ISupplierService, SupplierService>();
 builder.Services.AddSingleton<ITokenService, TokenService>();
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddTransient<ISupplierRepository, SupplierRepository>();
 
-
-//builder.Services.AddTransient<IGenericRepository<User>>(sp => new GenericRepository<User>(
-//    sp.GetRequiredService<IDatabaseResolverService>(),
-//    DatabaseTypes.MedicalSystem,
-//    "Catalogs_user"
-//));
-
-//builder.Services.AddTransient<IGenericRepository<RevokedToken>>(sp => new GenericRepository<RevokedToken>(
-//       sp.GetRequiredService<IDatabaseResolverService>(),
-//          DatabaseTypes.MedicalSystem,
-//             "RevokedTokens"
-//             ));
-
-//builder.Services.AddTransient<IGenericRepository<Supplier>>(sp => new GenericRepository<Supplier>(
-//       sp.GetRequiredService<IDatabaseResolverService>(),
-//          DatabaseTypes.MedicalSystem,
-//             "Suppliers"
-//             ));
-
-//builder.Services.AddTransient<ExceptionMiddleware>();
-
+// Authentication & Authorization
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
@@ -69,26 +37,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = builder.Configuration["Jwt:Issuer"], // Change here
-                ValidAudience = builder.Configuration["Jwt:Audience"], // Change here
-                IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])) // Change here
+                ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                ValidAudience = builder.Configuration["Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
             };
         });
-
-builder.Services.AddAuthorization();
-
-
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("IsAdmin", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
 });
 
-//builder.Services.AddAutoMapper(typeof(MedicalSystemMappingProfile)); // Ajusta la clase según tu estructura
-
-
-
+// Swagger
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -125,20 +85,29 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+// Middleware
 app.UseMiddleware<ExceptionMiddleware>();
 
-
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-//}
+// Swagger (uncomment the environment check if needed)
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
+bool isAuthenticationEnabled = builder.Configuration.GetValue<bool>("Authentication:Enabled");
+
+//if (!isAuthenticationEnabled)
+//{
+//    builder.Services.AddAuthorization(options =>
+//    {
+//        // Define tu política global
+//        options.FallbackPolicy = new AuthorizationPolicyBuilder()
+//            .RequireAuthenticatedUser()
+//            .Build();
+//    });
+//}
+
+
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
