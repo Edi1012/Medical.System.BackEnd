@@ -59,43 +59,6 @@ Medical.System.Core:
   Interfaces: "Contains the interface definitions for repositories and services."
   UnitOfWork: "Includes the implementation and interface for the Unit of Work pattern."
   Validators: "Houses the validator classes for validating data."
-  Files:
-    Enums:
-      - Gender.cs
-      - MaritalStatus.cs
-      - UserRoleEnum.cs
-    Exceptions:
-      - NotFoundException.cs
-      - ValidationException.cs
-      - ErrorDetail.cs
-      - ErrorResponse.cs
-      - ErrorHandlingMiddleware.cs
-    DTOs:
-      - AddressDTO.cs
-      - CreateSupplierDto.cs
-      - ...
-    Entities:
-      - Address.cs
-      - EmergencyContact.cs
-      - ...
-    Repositories:
-      - GenericRepository.cs
-      - SupplierRepository.cs
-      - ...
-    Services:
-      - DatabaseResolverService.cs
-      - SupplierService.cs
-      - ...
-    Interfaces:
-      - IGenericRepository.cs
-      - ISupplierRepository.cs
-      - ...
-    UnitOfWork:
-      - IUnitOfWork.cs
-      - UnitOfWork.cs
-    Validators:
-      - CreateTokenValidator.cs
-      - CreateUserValidator.cs
 ```
 
 
