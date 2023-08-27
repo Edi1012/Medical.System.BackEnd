@@ -1,3 +1,4 @@
+using Medical.System.Core.Mapeo;
 using Medical.System.Core.Middlewares;
 using Medical.System.Core.Repositories;
 using Medical.System.Core.Repositories.Implementations;
@@ -6,7 +7,6 @@ using Medical.System.Core.Services.Implementations;
 using Medical.System.Core.Services.Interfaces;
 using Medical.System.Core.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Security.Claims;
@@ -26,6 +26,11 @@ builder.Services.AddSingleton<ISupplierService, SupplierService>();
 builder.Services.AddSingleton<ITokenService, TokenService>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<ISupplierRepository, SupplierRepository>();
+builder.Services.AddTransient<IPatientRepository, PatientRepository>();
+builder.Services.AddTransient<IPatientService, PatientService>();
+builder.Services.AddAutoMapper(typeof(PatientProfile).Assembly);
+
+
 
 // Authentication & Authorization
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
