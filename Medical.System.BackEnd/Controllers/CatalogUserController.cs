@@ -1,6 +1,4 @@
-﻿using Amazon.Auth.AccessControlPolicy;
 using Medical.System.Core.Models.DTOs;
-using Medical.System.Core.Models.Entities;
 using Medical.System.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -45,14 +43,12 @@ namespace Medical.System.BackEnd.Controllers
         }
 
 
-
-
-        [Authorize(Policy = "IsAdmin")]
-        [Authorize(Policy = "IsAdmin")]
-        [HttpGet("GetAll")]
-        public async Task<IActionResult> Login()
+        [Authorize(Roles = "Admin")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByIdAsync(string id)
         {
-            return Ok("Todos");
+            var supplier = await CatalogsService.GetUserAsync(id);
+            return Ok(supplier);
         }
     }
 }
